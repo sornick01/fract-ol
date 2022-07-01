@@ -5,7 +5,7 @@ CFLAGS		= -Wall -Wextra -Werror
 DEP_FLAGS	= -MP -MMD
 
 
-SRC = main.c
+SRC = main.c 
 
 OBJ = $(SRC:.c=.o)
 

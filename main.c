@@ -1,46 +1,30 @@
-#include <stdlib.h>
-#include <mlx.h>
 #include <stdio.h>
+#include "./includes/fractol.h"
+#include <mlx.h>
 
-typedef struct	s_data {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}				t_data;
+#define KEY_ESC 65307
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+typedef struct	s_vars {
+	void	*mlx;
+	void	*win;
+}				t_vars;
+
+int	close(int keycode, t_vars *vars)
 {
-	char	*dst;
-
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	printf("%d\n", keycode);
+	if (keycode == KEY_ESC)
+	{
+		mlx_destroy_window(vars->mlx, vars->win);
+		return (0);
+	}
 }
 
 int	main(void)
 {
-	void	*mlx;
-	void	*mlx_win;
-	t_data	img;
+	t_vars	vars;
 
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 1920, 1080, "Hello world!");
-	img.img = mlx_new_image(mlx, 1920, 1080);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
-								&img.endian);
-	printf("%d, %d, %d\n", img.bits_per_pixel, img.line_length, img.endian);
-
-	for (int x = -500; x < 500; x++)
-	{
-		for (int y = -500; y < +500; y++)
-		{
-			if ((x) * (x) + (y) * (y) <= 150 * 150)
-				my_mlx_pixel_put(&img, 1920/2 + x, 1080/2 - y, 0x00FF0000);
-		}
-	}
-
-	mlx_put_image_to_window(mlx, mlx_win, img.img, 10, 10);
-
-	mlx_loop(mlx);
+	vars.mlx = mlx_init();
+	vars.win = mlx_new_window(vars.mlx, 100, 100, "Hello world!");
+	mlx_hook(vars.win, 4, 5, close, &vars);
+	mlx_loop(vars.mlx);
 }
