@@ -1,4 +1,5 @@
-#include "../includes/fractol.h"
+#include "includes/fractol.h"
+#include <pthread.h>
 
 static int	iterate_mandelbrot(t_fractal *fractal)
 {

@@ -17,7 +17,7 @@
 # define ITERATIONS_START	32
 # define ITERATIONS_CHANGE	8
 # define ITERATIONS_MIN		10
-# define ITERATIONS_MAX		256
+# define ITERATIONS_MAX		512
 
 /* Fractals math */
 

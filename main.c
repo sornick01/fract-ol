@@ -1,30 +1,23 @@
-#include <stdio.h>
 #include "./includes/fractol.h"
-#include <mlx.h>
 
-#define KEY_ESC 65307
-
-typedef struct	s_vars {
-	void	*mlx;
-	void	*win;
-}				t_vars;
-
-int	close(int keycode, t_vars *vars)
+int	main(int argc, char *argv[])
 {
-	printf("%d\n", keycode);
-	if (keycode == KEY_ESC)
-	{
-		mlx_destroy_window(vars->mlx, vars->win);
-		return (0);
-	}
-}
+	t_fractal	fractal;
 
-int	main(void)
-{
-	t_vars	vars;
-
-	vars.mlx = mlx_init();
-	vars.win = mlx_new_window(vars.mlx, 100, 100, "Hello world!");
-	mlx_hook(vars.win, 4, 5, close, &vars);
-	mlx_loop(vars.mlx);
+	init_application_from_args(&fractal, argc, argv);
+	fractal.window = create_window(WIN_WIDTH, WIN_HEIGHT, WIN_NAME);
+	if (!fractal.window.mlx || !fractal.window.win)
+		fail_exit(&fractal, INIT_WINDOW_ERROR);
+	fractal.image = create_image(&fractal);
+	if (!fractal.image.img || !fractal.image.addr)
+		fail_exit(&fractal, INIT_IMAGE_ERROR);
+	set_defaults(&fractal);
+	draw_fractal(&fractal);
+	mlx_hook(fractal.window.win, 6, 6, mouse_motion_hook, &fractal);
+	mlx_hook(fractal.window.win, 4, 0, mouse_hook, &fractal);
+	mlx_hook(fractal.window.win, 2, 5, keyboard_hook, &fractal);
+	mlx_hook(fractal.window.win, 17, 0, close_hook, &fractal);
+	mlx_loop(fractal.window.mlx);
+	success_exit(&fractal);
+	return (0);
 }
