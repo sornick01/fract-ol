@@ -8,7 +8,6 @@
 # include <pthread.h>
 # include "errors.h"
 # include "keys.h"
-# include "../libft/libft.h"
 
 typedef struct
 {
